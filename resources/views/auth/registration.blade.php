@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,6 +46,16 @@
                         value="">
                         <span class="text-danger">@error('password'){{$message}} @enderror</span>
                     </div>
+
+<label for="role">Register as: </label>
+<select class="form-control" name="role">
+<option value="" disabled>Select a Role</option>
+    <option value="admin">Admin</option>
+    <option value="user">User</option>
+
+</select>
+
+
                     <br>
                     <div class="form-group">
                         <button class="btn btn-block btn-primary" type="submit">Register</button>

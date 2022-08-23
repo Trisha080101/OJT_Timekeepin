@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Hash;
 use Session;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -21,11 +22,13 @@ class AuthController extends Controller
         $request->validate([
             'name'=>'required',
             'email'=>'required|email|unique:users',
-            'password'=>'required|max:15|min:8',
+            'role'=>'required',
+            'password'=>'required|max:15|min:8'
         ]);
         $user= new User(); 
-        $user->name=$request-> name;
-        $user->email=$request-> email;
+        $user->name=$request->name;
+        $user->email=$request->email;
+        $user->role=$request->role;
         $user->password=Hash::make($request-> password);
         $res=$user->save();
         if($res){
@@ -58,7 +61,7 @@ class AuthController extends Controller
         }
     }
 
-    public function dashboard(){
+  /*  public function dashboard(){
         $data=array();
         if(Session::has ('loginId')){
             $data = User::where('id',"=", Session::get ('loginId'))->first();
@@ -66,6 +69,28 @@ class AuthController extends Controller
         return view('dashboard', compact('data'));
     }
 
+    public function logout(){
+        if(Session::has ('loginId')){
+            Session::pull('loginId');
+            return redirect('login');
+        }
+    }
+
+    */
+
+    public function dashboard(){
+        $data=array();
+        if(Session::has ('loginId')){
+            $data = User::where('id',"=", Session::get ('loginId'))->first();
+            if($data->role=="admin"){
+                return view ('admindash', compact ('data'));
+            }elseif($data->role=="user"){
+                return view ('userdash', compact ('data'));
+            }
+        }
+        
+        // return view('userdash', compact('data'));
+    }
     public function logout(){
         if(Session::has ('loginId')){
             Session::pull('loginId');
